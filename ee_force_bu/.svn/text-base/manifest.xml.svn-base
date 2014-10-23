@@ -1,0 +1,19 @@
+<package>
+  <description brief="ee_force">
+
+     ee_force
+
+  </description>
+  <author>Patrick Barragan</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/ee_force</url>
+  <depend package="pr2_utils"/>
+  <depend package="rospy"/>
+  <depend package="roscpp"/>
+  <depend package="kdl_parser"/>
+  <depend package="sensor_msgs"/>
+
+</package>
+
+

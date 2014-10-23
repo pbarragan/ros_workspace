@@ -1,0 +1,55 @@
+10
+
+dir
+10
+svn+ssh://svn.csail.mit.edu/afs/csail.mit.edu/u/b/barragan/REPOS/pr2_repo/ros_workspace
+svn+ssh://svn.csail.mit.edu/afs/csail.mit.edu/u/b/barragan/REPOS/pr2_repo
+
+
+
+2012-10-02T15:57:22.042567Z
+10
+barragan
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+6c1cf318-b642-4601-a25f-6a127b79aa45
+
+simple_trajectory
+dir
+
+pr2_pick_and_place_tutorial
+dir
+
+get_ik_OR
+dir
+
+filter_client_test
+dir
+
+ee_impulse_try1
+dir
+
+ee_force
+dir
+
+pr2_pick_and_place_demos2
+dir
+
+slide_box
+dir
+
+actuate_mechanism
+dir
+

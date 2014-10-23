@@ -1,0 +1,16 @@
+<package>
+  <description brief="force_tester">
+
+     force_tester
+
+  </description>
+  <author>Patrick Barragan</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/force_tester</url>
+  <depend package="ee_force"/>
+  <depend package="roscpp"/>
+
+</package>
+
+

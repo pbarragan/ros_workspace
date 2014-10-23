@@ -1,0 +1,233 @@
+
+
+#include <math.h>
+#include <stdlib.h>
+#include <ros/ros.h>
+#include "std_msgs/String.h"
+#include <sensor_msgs/JointState.h>
+
+#include <kdl_parser/kdl_parser.hpp>
+#include <kdl/chain.hpp>
+#include <kdl/tree.hpp>
+#include <kdl/chainjnttojacsolver.hpp>
+#include <kdl/jacobian.hpp>
+#include <kdl/jntarray.hpp>
+
+#include <Eigen/Dense>
+
+#include <stdio.h>
+#include <ee_force/ee_force_pub.hh>
+
+#include <ee_force/eeForceMsg.h>
+
+
+//using namespace ee_force;
+using namespace Eigen;
+using namespace std;
+using namespace ee_force;
+
+//typedef pcl::PointCloud<pcl::PointXYZ> PointCloudXYZ;
+
+
+ros::Publisher ee_force_pub;
+
+EEForcePub::EEForcePub() {
+  
+  KDL::Tree my_tree;
+  ros::NodeHandle node;
+  std::string robot_desc_string;
+  node.param("robot_description", robot_desc_string, string());
+  if (!kdl_parser::treeFromString(robot_desc_string, my_tree)){
+    ROS_ERROR("Failed to construct kdl tree");
+    return;
+  }
+
+  string chain_root = "torso_lift_link";
+  string chain_tip = "l_gripper_tool_frame";
+
+  if (!my_tree.getChain(chain_root,chain_tip,chain_)){
+    ROS_ERROR("Failed to construct kdl chain from tree");
+    return;
+  }
+
+  jac_solver_ = new KDL::ChainJntToJacSolver(chain_);
+
+  numJnts = chain_.getNrOfJoints();
+
+  q_in_.resize(numJnts);
+  //jac_ = KDL::Jacobian::Jacobian(numJnts);
+  jac_ = KDL::Jacobian(numJnts);
+
+
+}
+
+EEForcePub::~EEForcePub() {
+  delete jac_solver_;
+}
+
+
+/* handle a joint_states message */
+void EEForcePub::joint_states_callback(sensor_msgs::JointState msg)
+{
+  ROS_INFO("Got joint_states msg\n");
+
+  cout << msg.effort[0] << endl;
+
+  //(*jac_solver_).JntToJac()
+
+  //jac_solver_->blah();
+  //This code was based on the following URL:
+  //http://mediabox.grasp.upenn.edu/roswiki/doc/api/pr2_led_servo/html/led__error__calc_8cpp_source.html#l00067
+
+  /*
+  //build JntArray
+  for (size_t i=0; i<numJnts; i++){
+    cout << msg.name[i] << endl;
+    cout << chain_.segments[i].getJoint().getName() << endl;
+    for (size_t j = 0; j < msg.name.size(); j++){
+      if (msg.name[j] == chain_.segments[i].getJoint().getName())
+	{
+	  linkNames_[i] = chain_.segments[i].getJoint().getName();
+	  q_in_(i) = msg.position[j];
+	  jointEfforts_(i) = msg.effort[j];
+	  break;
+	}
+    }
+  }
+  */
+
+  unsigned int cur_joint = 0;
+
+  for(size_t i=0; i < chain_.segments.size(); i++)
+    {
+ 
+      // We only care of non fixed segments
+      if (chain_.segments[i].getJoint().getType() != KDL::Joint::None)
+	{
+
+	  // Search for the joint in joint states
+	  size_t j;
+	  for (j=0; j < msg.name.size(); j++)
+	    {
+	      if ( msg.name[j] == chain_.segments[i].getJoint().getName() )
+		{ 
+
+		  linkNames_[cur_joint] = chain_.segments[i].getJoint().getName();
+		  q_in_(cur_joint) = msg.position[j];
+		  jointEfforts_(cur_joint) = msg.effort[j];	  
+		  cur_joint++;
+		  break;
+		}
+	    }
+	  if (j == msg.name.size())
+	    {
+	      ROS_ERROR("Couldn't find [%s] in joint_states", chain_.segments[i].getJoint().getName().c_str());
+	      return;
+	    }
+	}
+    }
+  
+  jac_solver_->JntToJac(q_in_,jac_);
+  
+  //unsigned int numRows = jac_.rows();
+  //unsigned int numColms = jac_.columns();
+
+  //cout << numRows << endl;
+  //cout << numColms << endl;
+  /*
+  cout << "I'm printing the Jacobian" << endl;
+
+  //let's print some stuff
+  for (size_t k=0; k<numColms; k++){
+    KDL::Twist tempTwist = jac_.getColumn(k);
+    cout << "This is a new column" << endl;
+
+    for (size_t l=0; l<numRows; l++){
+      cout << tempTwist(l) << endl;
+    }
+  }
+  */
+
+  jac_T_ =jac_.data.transpose();
+  cout << "This is the regular one" << endl;
+  cout << jac_.data << endl;
+  //cout << "This should be the transpose" << endl;
+  //cout << jac_T_ << endl;
+  //cout << "This is J^T*J" << endl;
+  //cout << jac_.data.transpose()*jac_.data << endl;
+  //cout << "This is inv(J^T*J)" << endl;
+  //cout << (jac_.data.transpose()*jac_.data).inverse() << endl;
+  //cout << "This is det(J^T*J)" << endl;
+  //cout << (jac_.data.transpose()*jac_.data).determinant() << endl;
+  cout << "This is jointEfforts_" << endl;
+  cout << jointEfforts_ << endl;
+  cout << "This is a solution" << endl;
+  eeEffort_ = (jac_.data.transpose()).colPivHouseholderQr().solve(jointEfforts_);
+  //eeEffort2_ = (jac_.data.transpose()).fullPivHouseholderQr().solve(jointEfforts_);
+
+  cout << eeEffort_ << endl;
+  cout << "This is a check" << endl;
+  cout << jac_T_*eeEffort_ << endl;
+  //cout << "This is a more careful solution" << endl;
+  //cout << eeEffort2_ << endl;
+  //cout << "This is a check of the more careful solution" << endl;
+  //cout << jac_T_*eeEffort2_ << endl;
+  cout << "These are the link names and joint angles" << endl;
+  for (size_t n = 0; n<7; n++){
+    cout << linkNames_[n] << endl;  
+    cout << q_in_(n) << endl;
+  }
+
+  std::cout << "Pre assignment" << std::endl;
+
+  eeForceMsg ee_force_array;
+
+  /*
+  for (size_t s=0;s<6;s++){
+    ee_force_array.data[s] = eeEffort_(s);
+  }
+  for (size_t s=0;s<7;s++){
+    ee_force_array.jointAngles[s] = q_in_(s);
+  }
+  */
+  for (size_t s=0;s<6;s++){
+    ee_force_array.data.push_back(eeEffort_(s));
+  }
+  for (size_t s=0;s<7;s++){
+    ee_force_array.jointAngles.push_back(q_in_(s));
+  }
+  std::cout << "Pre publish" << std::endl;
+
+  ee_force_pub.publish(ee_force_array);
+  
+  std::cout << "I published" << std::endl;
+
+  if (eeEffort_(0)>20){
+    ROS_INFO("you are pushing me back with more than 20 N");
+  }
+  //ROS_INFO("efforts are %s", msg.effort[0].c_str());
+}
+
+
+
+//------------------- MAIN -------------------//
+
+int main(int argc, char **argv)
+{
+  // init ROS
+  ros::init(argc, argv, "ee_force_pub");
+  ros::NodeHandle nh;
+
+  // publishers
+  ee_force_pub = nh.advertise<eeForceMsg>("ee_force", 1);
+
+  // subscribers
+  EEForcePub eepub;
+ 
+  ros::Subscriber sub_joint_states = 
+    nh.subscribe("/joint_states", 1, &EEForcePub::joint_states_callback, &eepub);
+
+  ros::spin();
+
+  return 0;
+}

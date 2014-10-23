@@ -1,0 +1,10 @@
+(cl:defpackage slide_box-srv
+  (:use )
+  (:export
+   "ROBOT_ACTUATE_OBJECT"
+   "<ROBOT_ACTUATE_OBJECT-REQUEST>"
+   "ROBOT_ACTUATE_OBJECT-REQUEST"
+   "<ROBOT_ACTUATE_OBJECT-RESPONSE>"
+   "ROBOT_ACTUATE_OBJECT-RESPONSE"
+  ))
+

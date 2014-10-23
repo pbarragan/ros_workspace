@@ -1,0 +1,26 @@
+<package>
+  <description brief="actuate_mechanism">
+
+     actuate_mechanism
+
+  </description>
+  <author>Patrick Barragan</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/actuate_mechanism</url>
+  <depend package="arm_navigation_msgs"/>
+  <depend package="kinematics_msgs"/>
+  <depend package="actionlib_msgs"/>
+  <depend package="planning_environment"/>
+  <depend package="pr2_arm_navigation_perception"/>
+  <depend package="mapping_rviz_plugin"/>
+  <depend package="ee_force"/>
+  <depend package="actionlib"/>
+  <depend package="roscpp"/>
+  <depend package="pr2_controllers_msgs"/>
+
+
+
+</package>
+
+

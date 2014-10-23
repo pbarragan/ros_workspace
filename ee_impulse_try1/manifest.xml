@@ -1,0 +1,34 @@
+<package>
+  <description brief="ee_impulse_try1">
+
+     ee_impulse_try1
+
+  </description>
+  <author>Patrick R Barragan</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/ee_impulse_try1</url>
+  <depend package="actionlib"/>
+  <depend package="roscpp"/>
+  <depend package="pr2_utils"/> 
+  <depend package="ee_cart_imped_action"/>
+  <depend package="furniture"/>
+  <depend package="cardboard"/>
+  <depend package="visualization_msgs"/>
+  <depend package="sensor_msgs"/> 
+  <depend package="object_manipulation_msgs"/>
+  <depend package="geometry_msgs"/>
+  <depend package="actionlib_msgs"/>
+  <depend package="tf_conversions"/>
+  <depend package="object_manipulator"/>
+  <depend package="tabletop_object_detector"/>
+  <depend package="tabletop_collision_map_processing"/>
+  <depend package="household_objects_database"/>
+  <depend package="pr2_gripper_reactive_approach"/>
+  <depend package="simple_Jtranspose_controller"/>
+  <depend package="pr2_tabletop_manipulation_launch"/>
+
+
+</package>
+
+

@@ -1,0 +1,266 @@
+.
+
+
+
+ This is a new experiment
+
+
+Initialization:
+Prior mu: 0
+Prior var: 50
+Likelihood mu: 0
+Likelihood var: 0
+Posterior mu: 0
+Posterior var: 0
+Model var (measurement + process noise): 0.0001
+Initial Force: 5
+
+
+ Iteration 6:
+
+Measurement z: 0.00927421450615
+Likelihood mu: 4306.74765942
+Likelihood mu: 4306.74765942
+Likelihood var: 46.4378698225
+Posterior mu: 2232.91310112
+Posterior var: 24.0765738127
+New desired x: 0.169247418642
+New Force: 29.6641060492
+
+
+ Iteration 6:
+
+
+
+
+ This is a new experiment
+
+
+Initialization:
+Prior mu: 0
+Prior var: 50
+Likelihood mu: 0
+Likelihood var: 0
+Posterior mu: 0
+Posterior var: 0
+Model var (measurement + process noise): 0.0001
+Initial Force: 10
+
+
+ Iteration 0:
+
+Measurement z: 0.113180905581
+Likelihood mu: 13139.7003993
+Likelihood mu: 13139.7003993
+Likelihood var: 11.6094674556
+Posterior mu: 10663.7023026
+Posterior var: 9.4218209758
+New desired x: 0.168819069862
+New Force: 13.5569781023
+
+
+ Iteration 1:
+
+Measurement z: 0.131840884686
+Likelihood mu: 8327.92140569
+Likelihood mu: 8327.92140569
+Likelihood var: 6.31664557285
+Posterior mu: 9265.3888531
+Posterior var: 3.78145504652
+New desired x: 0.179014861584
+New Force: 14.9767943838
+
+
+ Iteration 2:
+
+Measurement z: 0.160955399275
+Likelihood mu: 8330.67349322
+Likelihood mu: 8330.67349322
+Likelihood var: 5.17576516895
+Posterior mu: 8870.78159441
+Posterior var: 2.18504433819
+New desired x: 0.186888933182
+New Force: 15.6392887567
+
+
+ Iteration 3:
+
+Measurement z: 0.11303922534
+Likelihood mu: 5365.46633618
+Likelihood mu: 5365.46633618
+Likelihood var: 4.74655264139
+Posterior mu: 7765.80257138
+Posterior var: 1.49625375012
+New desired x: 0.17777466774
+New Force: 16.3022637181
+
+
+
+This is a new Bayesian experiment
+
+
+Initialization:
+Prior mu: 0
+Prior var: 50
+Likelihood mu: 0
+Likelihood var: 0
+Posterior mu: 0
+Posterior var: 0
+Model var (measurement + process noise): 0.0001
+Initial Force: 10
+
+
+Iteration 0:
+
+Measurement z: 0.0845726132393
+
+
+
+This is a new Bayesian experiment
+
+
+Initialization:
+Prior mu: 0
+Prior var: 50
+Likelihood mu: 0
+Likelihood var: 0
+Posterior mu: 0
+Posterior var: 0
+Model var (measurement + process noise): 0.0001
+Initial Force: 10
+
+
+Iteration 0:
+
+Measurement z: 0.0552089512348
+Error in x: 0.121661871672
+Likelihood mu: 6409.4652262
+Likelihood mu: 6409.4652262
+Likelihood var: 11.6094674556
+Posterior mu: 5201.68854796
+Posterior var: 9.4218209758
+New desired x: 0.163938909769
+New Force: 19.1282393719
+
+
+Iteration 1:
+
+
+
+
+This is a new Bayesian experiment
+
+
+Initialization:
+Prior mu: 0
+Prior var: 50
+Likelihood mu: 0
+Likelihood var: 0
+Posterior mu: 0
+Posterior var: 0
+Model var (measurement + process noise): 0.0001
+Initial Force: 10
+
+
+Iteration 0:
+
+Measurement z: 0.0787300467491
+Error in x: 0.115256369114
+Likelihood mu: 9140.13915513
+Likelihood mu: 9140.13915513
+Likelihood var: 11.6094674556
+Posterior mu: 7417.80405886
+Posterior var: 9.4218209758
+New desired x: 0.177916675806
+New Force: 16.686943612
+
+
+Iteration 1:
+
+Measurement z: 0.159030675888
+Error in x: 0.0366887450218
+Likelihood mu: 6630.39812172
+Likelihood mu: 6630.39812172
+Likelihood var: 4.16925733648
+Posterior mu: 6871.94613614
+Posterior var: 2.89027811655
+New desired x: 0.1812748909
+New Force: 17.4998812652
+
+
+Iteration 2:
+
+Measurement z: 0.078680485487
+Error in x: 0.0900481343269
+Likelihood mu: 2982.69691709
+Likelihood mu: 2982.69691709
+Likelihood var: 3.79089795726
+Posterior mu: 5189.45613985
+Posterior var: 1.63994322061
+New desired x: 0.162785619497
+New Force: 19.0832897598
+
+
+Iteration 3:
+
+Measurement z: 0.102389514446
+Error in x: 0.0674070715904
+Likelihood mu: 3264.08374425
+Likelihood mu: 3264.08374425
+Likelihood var: 3.18790821688
+Posterior mu: 4535.43820906
+Posterior var: 1.08288097426
+New desired x: 0.17499807477
+New Force: 21.164750706
+
+
+Iteration 0:
+
+Measurement z: 0.0881116688251
+Error in x: 0.112076401711
+Likelihood mu: 10229.2955169
+Likelihood mu: 10229.2955169
+Likelihood var: 11.6094674556
+Posterior mu: 8301.72369549
+Posterior var: 9.4218209758
+New desired x: 0.186277508736
+New Force: 16.1399513895
+
+
+Iteration 1:
+
+Measurement z: 0.108691453934
+Error in x: 0.0900066494942
+Likelihood mu: 4843.9901561
+Likelihood mu: 4843.9901561
+Likelihood var: 4.45664307615
+Posterior mu: 5954.33523318
+Posterior var: 3.02552883801
+New desired x: 0.190930962563
+New Force: 19.2942405687
+
+
+Iteration 2:
+
+Measurement z: 0.192275583744
+Error in x: 0.00894719362259
+Likelihood mu: 5996.26832339
+Likelihood mu: 5996.26832339
+Likelihood var: 3.11858022045
+Posterior mu: 5974.98424388
+Posterior var: 1.53567495317
+New desired x: 0.207032114267
+New Force: 20.0565682477
+
+
+Iteration 3:
+
+Measurement z: 0.106292814016
+Error in x: 0.0984112024307
+Likelihood mu: 3067.62982754
+Likelihood mu: 3067.62982754
+Likelihood var: 2.88601807745
+Posterior mu: 4965.24627106
+Posterior var: 1.00232776116
+New desired x: 0.187106519938
+New Force: 20.9160760808

@@ -1,0 +1,43 @@
+#include <kdl/chain.hpp>
+#include <kdl/chainfksolver.hpp>
+#include <kdl/chainfksolverpos_recursive.hpp>
+#include <kdl/frames_io.hpp>
+#include <stdio.h>
+#include <iostream>
+#include <kdl/frames.hpp>
+
+using namespace KDL;
+ 
+ 
+int main( int argc, char** argv )
+{
+
+  //Creation of the chain:
+  KDL::Chain chain;
+  chain.addSegment(Segment(Joint(Joint::RotZ),Frame(Vector(0.0,0.0,1.020))));
+  chain.addSegment(Segment(Joint(Joint::RotX),Frame(Vector(0.0,0.0,0.480))));
+  chain.addSegment(Segment(Joint(Joint::RotX),Frame(Vector(0.0,0.0,0.645))));
+  chain.addSegment(Segment(Joint(Joint::RotZ)));
+  chain.addSegment(Segment(Joint(Joint::RotX),Frame(Vector(0.0,0.0,0.120))));
+  chain.addSegment(Segment(Joint(Joint::RotZ)));
+  
+  //Creation of the solvers:
+  ChainFkSolverPos_recursive fksolver1(chain1);//Forward position solver
+  ChainIkSolverVel_pinv iksolver1v(chain1);//Inverse velocity solver
+  ChainIkSolverPos_NR iksolver1(chain1,fksolver1,iksolver1v,100,1e-6);//Maximum 100 iterations, stop at accuracy 1e-6
+  
+  //Creation of jntarrays:
+  JntArray q(chain.getNrOfJoints());
+  JntArray q_init(chain.getNrOfJoints());
+  
+  //Set destination frame
+  Frame F_dest;
+  Vector F_trans = Vector(0.60,0,0);
+  F_dest.Identity(F_trans);
+  
+  int ret = iksolverpos.CartToJnt(q_init,F_dest,q);
+
+  cout << ret << endl;
+
+  return 0;
+}

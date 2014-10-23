@@ -1,0 +1,7 @@
+<launch>
+
+  <include file="$(find pr2_tabletop_manipulation_launch)/launch/pr2_tabletop_manipulation.launch"/> 
+
+  <include file="$(find ee_cart_imped_launch)/launch/load_ee_cart_imped.launch"/>
+
+</launch>

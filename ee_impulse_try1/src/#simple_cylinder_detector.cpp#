@@ -1,0 +1,388 @@
+
+
+#include <math.h>
+#include <stdlib.h>
+#include <ros/ros.h>
+#include <furniture/All_Hulls.h>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
+#include <pcl_ros/transforms.h>
+#include <pcl/filters/passthrough.h>
+
+#include <sensor_msgs/PointCloud2.h>
+#include <sensor_msgs/PointCloud.h>
+#include <sensor_msgs/point_cloud_conversion.h>
+#include <ee_impulse_try1/Cylinder.h>
+#include <ee_impulse_try1/Cylinders.h>
+#include <tf/transform_listener.h>
+
+#include <pcl/features/feature.h>
+#include <pcl/features/normal_3d.h>
+
+#define EIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET
+
+#include <pcl/features/principal_curvatures.h>
+#include <pcl/features/fpfh.h>
+#include <pcl/filters/passthrough.h>
+#include <pcl/filters/voxel_grid.h>
+#include <pcl/range_image/range_image.h>
+#include <pcl/registration/icp.h>
+#include <pcl/registration/transforms.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/kdtree/kdtree.h>
+#include <pcl/kdtree/kdtree_flann.h>
+#include <pcl/point_types.h>
+#include <pcl/point_cloud.h>
+#include <pcl/ros/conversions.h>
+#include <pcl/segmentation/extract_clusters.h>
+//#include <pcl/segmentation/extract_polygonal_prism_data.hpp>
+#include <pcl_ros/transforms.h>
+
+
+using namespace ee_impulse_try1;
+using namespace std;
+
+typedef pcl::PointCloud<pcl::PointXYZ> PointCloudXYZ;
+
+
+ros::Publisher cylinders_pub;
+tf::TransformListener *tf_listener;
+string target_frame; // = "base_link";
+geometry_msgs::Polygon table_polygon;
+bool have_table = false;
+
+
+//------------------------ POLYGON FILTER ------------------------//
+
+/** \brief Check if a 2d point (X and Y coordinates considered only!) is inside or outside a given polygon. This 
+  * method assumes that both the point and the polygon are projected onto the XY plane.
+  * \note (This is highly optimized code taken from http://www.visibone.com/inpoly/)
+  *       Copyright (c) 1995-1996 Galacticomm, Inc.  Freeware source code.
+  * \param point a 3D point projected onto the same plane as the polygon
+  * \param polygon a polygon
+  */
+static bool isXYPointIn2DXYPolygon (const pcl::PointXYZ &point, const geometry_msgs::Polygon &polygon)
+{
+  bool in_poly = false;
+  double x1, x2, y1, y2;
+
+  int nr_poly_points = polygon.points.size ();
+  double xold = polygon.points[nr_poly_points - 1].x;
+  double yold = polygon.points[nr_poly_points - 1].y;
+  for (int i = 0; i < nr_poly_points; i++)
+  {
+    double xnew = polygon.points[i].x;
+    double ynew = polygon.points[i].y;
+    if (xnew > xold)
+    {
+      x1 = xold;
+      x2 = xnew;
+      y1 = yold;
+      y2 = ynew;
+    }
+    else
+    {
+      x1 = xnew;
+      x2 = xold;
+      y1 = ynew;
+      y2 = yold;
+    }
+
+    if ( (xnew < point.x) == (point.x <= xold) && (point.y - y1) * (x2 - x1) < (y2 - y1) * (point.x - x1) )
+    {
+      in_poly = !in_poly;
+    }
+    xold = xnew;
+    yold = ynew;
+  }
+  return (in_poly);
+}
+
+/* filter a point cloud based on a polygon in the XY plane */
+static void polygon_filter(const geometry_msgs::Polygon &polygon, const PointCloudXYZ &cloud_in, PointCloudXYZ &cloud_out)
+{
+  cloud_out.height = 1;
+  cloud_out.is_dense = false;
+  cloud_out.points.resize(0);
+
+  for (size_t i = 0; i < cloud_in.points.size(); i++) {
+    if (isXYPointIn2DXYPolygon(cloud_in.points[i], polygon))
+      cloud_out.push_back(cloud_in.points[i]);
+  }
+
+  cloud_out.width = cloud_out.points.size();
+}
+
+
+//--------------------- DETECT TABLE (RANSAC) -------------------//
+
+/*
+double find_table(PointCloudXYZ &cloud)
+{
+  int iters = 500;
+  double dthresh = .005;
+ 
+  int num_points = cloud.points.size();
+ 
+  double tableZ = 0;
+  double best_tableZ = 0;
+  int best_num_inliers = 0;  
+
+  for (int i = 0; i < iters; i++) {
+    // sample a random points
+    int a = rand() % num_points;
+    
+    // fit table (horizontal plane)
+    tableZ = cloud.points[a].z
+
+    // compute num inliers
+    int n = 0;
+    for (int j = 0; j < num_points; j++) {
+      double dz = cloud.points[j].z - tableZ
+      if (dz < dthresh)
+	n++;
+    }
+    if (n > best_num_inliers) {
+       best_tableZ = ;
+      best_num_inliers = n;
+    }
+  }
+
+  return best_tableZ
+}
+*/
+
+
+
+//------------------- DETECT CYLINDERS (RANSAC) -----------------//
+
+Cylinder find_cylinder(PointCloudXYZ &cloud, vector<int> &inliers, vector<int> &outliers)
+{
+  int iters = 1000;
+  double dthresh = .005;
+  double rMax = 0.085; //the bowl is a bit less than 8 [cm]
+  double rMin = 0.01; //nothing is smaller than 1 [cm]
+  int num_points = cloud.points.size();
+ 
+  Cylinder best_cylinder;
+  int best_num_inliers = 0;  
+
+  //# pragma omp parallel for 
+  //  for (t = 0; t < 10; t++) {
+  
+  for (int i = 0; i < iters; i++) {
+    // sample three random points
+    int a = rand() % num_points;
+    int b = a;
+    while (a==b)
+      b = rand() % num_points;
+    int c = a;
+    while (c==a || c==b)
+      c = rand() % num_points;
+    
+    // set there x's and y's for use next
+    double xA = cloud.points[a].x;
+    double yA = cloud.points[a].y;
+    
+    double xB = cloud.points[b].x;
+    double yB = cloud.points[b].y;
+    
+    double xC = cloud.points[c].x;
+    double yC = cloud.points[c].y;
+
+    // fit circle
+    Cylinder cylinder;
+    
+    cylinder.x = .5*((xA*xA+yA*yA)*(yC-yB) + (xB*xB+yB*yB)*(yA-yC) + (xC*xC+yC*yC)*(yB-yA))/(xA*(yC-yB)+xB*(yA-yC)+xC*(yB-yA));
+
+    cylinder.y = .5*((xA*xA+yA*yA)*(xC-xB) + (xB*xB+yB*yB)*(xA-xC) + (xC*xC+yC*yC)*(xB-xA))/(yA*(xC-xB)+yB*(xA-xC)+yC*(xB-xA));
+
+    cylinder.r = sqrt((xA-cylinder.x)*(xA-cylinder.x)+(yA-cylinder.y)*(yA-cylinder.y));
+    
+    //prevent consideration of cylinders larger than a maximum radius
+    if ((cylinder.r < rMax) && (cylinder.r > rMin)){
+      // compute num inliers
+      int n = 0;
+      for (int j = 0; j < num_points; j += 5) {
+	double dx = cloud.points[j].x - cylinder.x;
+	double dy = cloud.points[j].y - cylinder.y;
+	double d = fabs(sqrt(dx*dx + dy*dy) - cylinder.r);
+	if (d < dthresh)
+	  n++;
+      }
+      if (n > best_num_inliers) {
+	best_cylinder = cylinder;
+	best_num_inliers = n;
+      }
+    }
+  }
+
+  // compute inliers & outliers
+  inliers.resize(0);
+  outliers.resize(0);
+  for (int j = 0; j < num_points; j++) {
+    double dx = cloud.points[j].x - best_cylinder.x;
+    double dy = cloud.points[j].y - best_cylinder.y;
+    double d = fabs(sqrt(dx*dx + dy*dy) - best_cylinder.r);
+    if (d < dthresh)
+      inliers.push_back(j);
+    else
+      outliers.push_back(j);
+  }
+
+  // add inliers as a cloud to the cloud part of the Cylinder msg
+  best_cylinder.cloud.header.frame_id = cloud.header.frame_id; //check out this line later
+  best_cylinder.cloud.points.resize(inliers.size());
+  for (unsigned int k = 0; k < inliers.size(); k++){
+    best_cylinder.cloud.points[k].x = (double) cloud.points[inliers[k]].x;
+    best_cylinder.cloud.points[k].y = (double) cloud.points[inliers[k]].y;
+    best_cylinder.cloud.points[k].z = (double) cloud.points[inliers[k]].z;
+  }
+    //best_cylinder.cloud.points[k] = cloud.points[inliers[k]];
+  
+  // ROS_INFO("%zu is the size of best_cylinder cloud.\n", best_cylinder.cloud.points.size());
+  return best_cylinder;
+} 
+
+Cylinders find_cylinders(PointCloudXYZ cloud)
+{
+  unsigned int min_points = 50;
+
+  Cylinders C;
+  C.header.frame_id=target_frame; //Check out this line later
+  ROS_INFO("%s is the cloud frame", cloud.header.frame_id.c_str());
+  vector<int> inliers;
+  vector<int> outliers;
+  unsigned int num_cyl_found = 0;
+  unsigned int num_cyl_expect = 3;
+
+  while (cloud.points.size() > min_points && num_cyl_found < num_cyl_expect) {
+
+    // find one cylinder
+    Cylinder cylinder = find_cylinder(cloud, inliers, outliers);
+    C.cylinders.push_back(cylinder);
+
+    // get point cloud of outliers
+    PointCloudXYZ new_cloud;
+    new_cloud.width = outliers.size();
+    new_cloud.height = 1;
+    new_cloud.points.resize(outliers.size());
+    for (unsigned int i = 0; i < outliers.size(); i++)
+      new_cloud.points[i] = cloud.points[outliers[i]];
+    cloud = new_cloud;
+
+    // increment the number of cylinders found
+    num_cyl_found++;
+    //ROS_INFO("%d cylinders found so far.\n", num_cyl_found);
+  }
+  //ROS_INFO("%zu cylinders found\n", C.cylinders.size());
+  // ROS_INFO("inliers size is %zu", inliers.size());
+  return C;
+}
+
+
+/* handle a PointCloud2 message */
+void pointcloud2_callback(sensor_msgs::PointCloud2 msg)
+{
+  ROS_INFO("Got PointCloud2 msg with %u points\n", msg.width * msg.height);
+
+  if (!have_table){
+    ROS_WARN("No table, bro\n");
+    return;
+  }
+  // get the cloud in PCL format in the right coordinate frame
+  PointCloudXYZ cloud, cloud2, full_cloud;
+  msg.header.stamp = ros::Time(0);
+  pcl::fromROSMsg(msg, cloud);
+  if (!pcl_ros::transformPointCloud(target_frame, cloud, cloud2, *tf_listener)) {
+    ROS_WARN("Can't transform point cloud; aborting object detection.");
+    return;
+  }
+  else{
+    cloud2.header.frame_id = target_frame;
+    ROS_INFO("Changed the frame");
+  }
+  ROS_INFO("%s is the target_frame", target_frame.c_str());
+  full_cloud = cloud2;
+  ROS_DEBUG("full cloud is %zu points", full_cloud.points.size());
+  /*for (size_t i = 0; i<table_polygon.points.size(); i++){
+    ROS_INFO("%f %f %f",table_polygon.points[i].x, table_polygon.points[i].y, table_polygon.points[i].z);
+    }*/
+
+  // filter out points outside of the attention area, and only keep points above the table
+  ROS_INFO("Have table, filtering points on table...");
+  polygon_filter(table_polygon, cloud2, cloud);
+
+  if (cloud.points.size() < 100) {
+    ROS_WARN("Not enough points in table region. Only %zu points; aborting object detection.", cloud.points.size());
+    return;
+  }
+
+  pcl::PassThrough<pcl::PointXYZ> pass;
+  pass.setInputCloud(cloud.makeShared());
+  pass.setFilterFieldName("z");
+  float table_height = table_polygon.points[0].z;
+  //float table_height = adjust_table_height(cloud);
+  //this is where you set how much to chop off of the bottom of the objects. 
+  //it's .02 right now..
+  pass.setFilterLimits(table_height + .02, 1000.);
+  pass.filter(cloud2);
+  ROS_INFO("Done filtering table.");
+
+  if (cloud2.points.size() < 100) {
+    ROS_WARN("Not enough points above table. Only %zu points; aborting object detection.", cloud2.points.size());
+    return;
+  }
+  ROS_INFO("Object Cloud is %zu points.", cloud2.points.size());
+  // find cylinders
+  ROS_INFO("%s is the cloud 2 frame right before CODE!!!!!!!!", cloud2.header.frame_id.c_str());
+  cloud2.header.frame_id = target_frame;
+  Cylinders C = find_cylinders(cloud2);
+
+  cylinders_pub.publish(C); 
+  ROS_INFO("Published cylinders msg\n");
+
+}
+
+
+
+/* handle an All_Hulls message */
+void all_hulls_callback(furniture::All_Hulls msg)
+{
+  ROS_INFO("Got All_Hulls msg\n");
+
+  if (msg.hulls.size() > 0) {
+    // hack: assume first table is the one we want
+    table_polygon.points.resize(msg.hulls[0].polygon.points.size());
+    target_frame = msg.hulls[0].header.frame_id;
+    ROS_INFO("msg frame is %s", msg.hulls[0].header.frame_id.c_str());
+    for (size_t i = 0; i < msg.hulls[0].polygon.points.size(); i++) {
+      table_polygon.points[i].x = msg.hulls[0].polygon.points[i].x;
+      table_polygon.points[i].y = msg.hulls[0].polygon.points[i].y;
+      table_polygon.points[i].z = msg.hulls[0].polygon.points[i].z;
+    }
+
+    have_table = true;
+  }
+}
+
+
+
+//------------------- MAIN -------------------//
+
+int main(int argc, char **argv)
+{
+  // init ROS
+  ros::init(argc, argv, "simple_cylinder_detector");
+  ros::NodeHandle nh;
+
+  // publishers
+  cylinders_pub = nh.advertise<Cylinders>("cylinders", 1);
+
+  // subscribers
+  ros::Subscriber sub_cloud2 = nh.subscribe("/narrow_stereo_textured/points2", 1, pointcloud2_callback);
+  ros::Subscriber sub_all_hulls = nh.subscribe("/convex_hulls", 1, all_hulls_callback);
+  tf_listener = new tf::TransformListener;
+
+  ros::spin();
+}

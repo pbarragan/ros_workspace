@@ -1,0 +1,13 @@
+
+#include <cmath>
+#include <vector>
+#include <limits>
+#include <algorithm>
+#include <complex>
+#include <slide_box/ik.hh>
+
+int getNumFreeParameters() { return 1; }
+int* getFreeParameters() { static int freeparams[] = {2}; return freeparams; }
+int getNumJoints() { return 7; }
+int getIKRealSize() { return sizeof(IKReal); }
+int getIKType() { return 0x67000001; }
