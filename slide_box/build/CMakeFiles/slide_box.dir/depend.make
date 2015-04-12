@@ -14,8 +14,16 @@ CMakeFiles/slide_box.dir/src/ikfastSep26Right.o: ../src/ikfastSep26Right.cpp
 
 CMakeFiles/slide_box.dir/src/slide_box.o: ../include/slide_box/slide_box.hh
 CMakeFiles/slide_box.dir/src/slide_box.o: ../srv_gen/cpp/include/slide_box/robot_actuate_object.h
-CMakeFiles/slide_box.dir/src/slide_box.o: /home/barragan/pr2_repo/ros_workspace/ee_force/msg_gen/cpp/include/ee_force/eeForceMsg.h
 CMakeFiles/slide_box.dir/src/slide_box.o: ../src/slide_box.cpp
+CMakeFiles/slide_box.dir/src/slide_box.o: /home/barragan/ros_packages/mit-ros-pkg/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_action/include/ee_cart_imped_action/ee_cart_imped_arm.hh
+CMakeFiles/slide_box.dir/src/slide_box.o: /home/barragan/ros_packages/mit-ros-pkg/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_msgs/msg_gen/cpp/include/ee_cart_imped_msgs/EECartImpedAction.h
+CMakeFiles/slide_box.dir/src/slide_box.o: /home/barragan/ros_packages/mit-ros-pkg/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_msgs/msg_gen/cpp/include/ee_cart_imped_msgs/EECartImpedActionFeedback.h
+CMakeFiles/slide_box.dir/src/slide_box.o: /home/barragan/ros_packages/mit-ros-pkg/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_msgs/msg_gen/cpp/include/ee_cart_imped_msgs/EECartImpedActionGoal.h
+CMakeFiles/slide_box.dir/src/slide_box.o: /home/barragan/ros_packages/mit-ros-pkg/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_msgs/msg_gen/cpp/include/ee_cart_imped_msgs/EECartImpedActionResult.h
+CMakeFiles/slide_box.dir/src/slide_box.o: /home/barragan/ros_packages/mit-ros-pkg/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_msgs/msg_gen/cpp/include/ee_cart_imped_msgs/EECartImpedFeedback.h
+CMakeFiles/slide_box.dir/src/slide_box.o: /home/barragan/ros_packages/mit-ros-pkg/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_msgs/msg_gen/cpp/include/ee_cart_imped_msgs/EECartImpedGoal.h
+CMakeFiles/slide_box.dir/src/slide_box.o: /home/barragan/ros_packages/mit-ros-pkg/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_msgs/msg_gen/cpp/include/ee_cart_imped_msgs/EECartImpedResult.h
+CMakeFiles/slide_box.dir/src/slide_box.o: /home/barragan/ros_packages/mit-ros-pkg/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_msgs/msg_gen/cpp/include/ee_cart_imped_msgs/StiffPoint.h
 CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/include/XmlRpcDecl.h
 CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/include/XmlRpcValue.h
 CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/include/actionlib/action_definition.h
@@ -51,6 +59,7 @@ CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/include/geometry_msgs/
 CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/include/geometry_msgs/TwistStamped.h
 CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/include/geometry_msgs/Vector3.h
 CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/include/geometry_msgs/Vector3Stamped.h
+CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/include/geometry_msgs/Wrench.h
 CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/include/ros/advertise_options.h
 CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/include/ros/advertise_service_options.h
 CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/include/ros/assert.h
@@ -171,11 +180,4 @@ CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/stacks/geometry/tf/inc
 CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/stacks/geometry/tf/include/tf/transform_listener.h
 CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/stacks/geometry/tf/msg_gen/cpp/include/tf/tfMessage.h
 CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/stacks/geometry/tf/srv_gen/cpp/include/tf/FrameGraph.h
-CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/stacks/pr2_controllers/pr2_controllers_msgs/msg_gen/cpp/include/pr2_controllers_msgs/JointTrajectoryAction.h
-CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/stacks/pr2_controllers/pr2_controllers_msgs/msg_gen/cpp/include/pr2_controllers_msgs/JointTrajectoryActionFeedback.h
-CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/stacks/pr2_controllers/pr2_controllers_msgs/msg_gen/cpp/include/pr2_controllers_msgs/JointTrajectoryActionGoal.h
-CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/stacks/pr2_controllers/pr2_controllers_msgs/msg_gen/cpp/include/pr2_controllers_msgs/JointTrajectoryActionResult.h
-CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/stacks/pr2_controllers/pr2_controllers_msgs/msg_gen/cpp/include/pr2_controllers_msgs/JointTrajectoryFeedback.h
-CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/stacks/pr2_controllers/pr2_controllers_msgs/msg_gen/cpp/include/pr2_controllers_msgs/JointTrajectoryGoal.h
-CMakeFiles/slide_box.dir/src/slide_box.o: /opt/ros/fuerte/stacks/pr2_controllers/pr2_controllers_msgs/msg_gen/cpp/include/pr2_controllers_msgs/JointTrajectoryResult.h
 

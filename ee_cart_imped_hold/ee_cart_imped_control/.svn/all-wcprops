@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/mit-ros-pkg/!svn/ver/3778/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_control
+END
+pr2_arms_cart_imped_controller.yaml
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/mit-ros-pkg/!svn/ver/3778/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_control/pr2_arms_cart_imped_controller.yaml
+END
+controller_plugins.xml
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/mit-ros-pkg/!svn/ver/3778/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_control/controller_plugins.xml
+END
+manifest.xml
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/mit-ros-pkg/!svn/ver/3778/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_control/manifest.xml
+END
+mainpage.dox
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/mit-ros-pkg/!svn/ver/3778/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_control/mainpage.dox
+END
+rosdoc.yaml
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/mit-ros-pkg/!svn/ver/3778/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_control/rosdoc.yaml
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/mit-ros-pkg/!svn/ver/3778/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_control/CMakeLists.txt
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/mit-ros-pkg/!svn/ver/3778/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_control/Makefile
+END

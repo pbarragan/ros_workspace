@@ -32,5 +32,5 @@ rosbuild_gensrv()
 #rosbuild_add_library(ik_lib src/ik.cpp src/get_ik_OR.cpp src/ikfastSep26left.cpp src/ikfastSep26Right.cpp)
 
 #rosbuild_add_executable(actuate_mechanism_wIK src/actuate_mechanism_wIK.cpp src/ik.cpp src/get_ik_OR.cpp src/ikfastSep26Left.cpp src/ikfastSep26Right.cpp)
-rosbuild_add_executable(slide_box src/slide_box.cpp src/ik.cpp src/get_ik_OR.cpp src/ikfastSep26Left.cpp src/ikfastSep26Right.cpp)
+rosbuild_add_executable(slide_box src/slide_box.cpp)
 #target_link_libraries(actuate_mechanism_wIK ik_lib)

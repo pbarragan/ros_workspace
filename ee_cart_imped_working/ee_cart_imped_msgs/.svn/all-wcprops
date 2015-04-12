@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/mit-ros-pkg/!svn/ver/1928/trunk/ee_cart_imped/ee_cart_imped_msgs
+END
+manifest.xml
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/mit-ros-pkg/!svn/ver/1928/trunk/ee_cart_imped/ee_cart_imped_msgs/manifest.xml
+END
+mainpage.dox
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/mit-ros-pkg/!svn/ver/1928/trunk/ee_cart_imped/ee_cart_imped_msgs/mainpage.dox
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/mit-ros-pkg/!svn/ver/1924/trunk/ee_cart_imped/ee_cart_imped_msgs/CMakeLists.txt
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/mit-ros-pkg/!svn/ver/1924/trunk/ee_cart_imped/ee_cart_imped_msgs/Makefile
+END

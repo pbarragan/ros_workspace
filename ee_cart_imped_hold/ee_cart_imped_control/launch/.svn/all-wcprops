@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/mit-ros-pkg/!svn/ver/3778/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_control/launch
+END
+r_arm_cart_imped_controller.launch
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/mit-ros-pkg/!svn/ver/3778/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_control/launch/r_arm_cart_imped_controller.launch
+END
+l_arm_cart_imped_controller.launch
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/mit-ros-pkg/!svn/ver/3778/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_control/launch/l_arm_cart_imped_controller.launch
+END

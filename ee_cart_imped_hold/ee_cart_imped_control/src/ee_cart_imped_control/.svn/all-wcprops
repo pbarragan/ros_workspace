@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/mit-ros-pkg/!svn/ver/3778/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_control/src/ee_cart_imped_control
+END
+control_switcher.py
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/mit-ros-pkg/!svn/ver/3778/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_control/src/ee_cart_imped_control/control_switcher.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/mit-ros-pkg/!svn/ver/3778/stacks/fuerte/trunk/ee_cart_imped/ee_cart_imped_control/src/ee_cart_imped_control/__init__.py
+END

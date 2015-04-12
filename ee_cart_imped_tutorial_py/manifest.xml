@@ -1,0 +1,16 @@
+<package>
+  <description brief="ee_cart_imped_tutorial_py">
+
+     ee_cart_imped_tutorial_py
+
+  </description>
+  <author>Patrick Barragan</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/ee_cart_imped_tutorial_py</url>
+  <depend package="rospy"/>
+  <depend package="ee_cart_imped_action"/>
+
+</package>
+
+
